@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>EcoBite AI — Full Project Report & Prototype</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+  :root {
+    --green-900: #0a3d1f;
+    --green-700: #145a32;
+    --green-500: #1e8449;
+    --green-400: #27ae60;
+    --green-300: #58d68d;
+    --green-100: #d5f5e3;
+    --green-50:  #eafaf1;
+    --red-alert: #e74c3c;
+    --amber: #f39c12;
+    --blue: #2980b9;
+    --dark: #1a1a2e;
+    --gray-800: #2c3e50;
+    --gray-600: #566573;
+    --gray-300: #bdc3c7;
+    --gray-100: #f2f3f4;
+    --white: #ffffff;
+    --shadow: 0 4px 24px rgba(0,0,0,0.10);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.15);
+    --radius: 16px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: var(--white); color: var(--gray-800); }
+
+  /* ── NAV ─────────────────────────────────────────────────── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid var(--green-100);
+    padding: 0 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .nav-logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--green-500); }
+  .nav-logo span { color: var(--gray-600); font-weight: 400; font-size: 0.8rem; margin-left: 8px; }
+  .nav-links { display: flex; gap: 4px; }
+  .nav-links a {
+    text-decoration: none; font-size: 0.82rem; font-weight: 500;
+    color: var(--gray-600); padding: 6px 12px; border-radius: 20px;
+    transition: all 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { background: var(--green-100); color: var(--green-700); }
+
+  /* ── HERO ─────────────────────────────────────────────────── */
+  .hero {
+    background: linear-gradient(135deg, var(--green-900) 0%, var(--green-700) 50%, var(--green-500) 100%);
+    color: white; padding: 80px 48px 64px; text-align: center; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(39,174,96,0.3) 0%, transparent 60%);
+  }
+  .hero-badge {
+    display: inline-block; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px; padding: 6px 18px; font-size: 0.78rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 24px; position: relative; z-index: 1;
+  }
+  .hero h1 {
+    font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 800; line-height: 1.1; margin-bottom: 16px; position: relative; z-index: 1;
+  }
+  .hero h1 span { color: var(--green-300); }
+  .hero p { font-size: 1.1rem; opacity: 0.88; max-width: 600px; margin: 0 auto 36px; line-height: 1.7; position: relative; z-index: 1; }
+  .hero-tags { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
+  .hero-tag {
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px; padding: 6px 16px; font-size: 0.8rem; font-weight: 500;
+  }
+  .hero-nav-btns { display: flex; gap: 12px; justify-content: center; margin-top: 32px; flex-wrap: wrap; position: relative; z-index: 1; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 24px; border-radius: 28px; font-size: 0.9rem; font-weight: 600;
+    text-decoration: none; border: none; cursor: pointer; transition: all 0.2s;
+  }
+  .btn-primary { background: white; color: var(--green-700); }
+  .btn-primary:hover { background: var(--green-100); transform: translateY(-2px); }
+  .btn-outline { background: transparent; color: white; border: 2px solid rgba(255,255,255,0.5); }
+  .btn-outline:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+
+  /* ── SECTION WRAPPER ──────────────────────────────────────── */
+  .section { padding: 72px 48px; max-width: 1100px; margin: 0 auto; }
+  .section-eyebrow {
+    display: inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--green-500); background: var(--green-50);
+    border: 1px solid var(--green-100); border-radius: 20px; padding: 4px 14px; margin-bottom: 16px;
+  }
+  .section-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; color: var(--green-900); margin-bottom: 12px; }
+  .section-sub { font-size: 1rem; color: var(--gray-600); line-height: 1.7; max-width: 700px; margin-bottom: 48px; }
+  .divider { height: 3px; background: linear-gradient(90deg, var(--green-400), var(--green-100)); border-radius: 2px; margin-bottom: 48px; }
+
+  /* ── STUDENT INFO TABLE ───────────────────────────────────── */
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1.5px solid var(--green-100); border-radius: var(--radius); overflow: hidden; }
+  .info-row { display: contents; }
+  .info-label { background: var(--green-50); padding: 14px 20px; font-weight: 600; font-size: 0.88rem; color: var(--green-700); border-bottom: 1px solid var(--green-100); }
+  .info-val { background: white; padding: 14px 20px; font-size: 0.88rem; color: var(--gray-800); border-bottom: 1px solid var(--green-100); }
+
+  /* ── PROBLEM CARDS ────────────────────────────────────────── */
+  .problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+  .problem-card {
+    background: white; border: 1.5px solid var(--green-100); border-radius: var(--radius);
+    padding: 28px 24px; transition: all 0.25s; position: relative; overflow: hidden;
+  }
+  .problem-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--green-400); }
+  .problem-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--green-300); }
+  .problem-icon { font-size: 2rem; margin-bottom: 12px; }
+  .problem-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 700; color: var(--green-900); margin-bottom: 8px; }
+  .problem-card p { font-size: 0.85rem; color: var(--gray-600); line-height: 1.6; }
+
+  /* ── SDG TABLE ────────────────────────────────────────────── */
+  .sdg-table { width: 100%; border-collapse: collapse; border-radius: var(--radius); overflow: hidden; border: 1.5px solid var(--green-100); }
+  .sdg-table th { background: var(--green-700); color: white; padding: 14px 20px; text-align: left; font-size: 0.88rem; font-weight: 600; }
+  .sdg-table td { padding: 14px 20px; font-size: 0.88rem; border-bottom: 1px solid var(--green-100); }
+  .sdg-table tr:last-child td { border-bottom: none; }
+  .sdg-table tr:nth-child(even) td { background: var(--green-50); }
+  .badge-primary { background: var(--green-400); color: white; border-radius: 12px; padding: 3px 10px; font-size: 0.75rem; font-weight: 700; }
+  .badge-secondary { background: var(--green-100); color: var(--green-700); border-radius: 12px; padding: 3px 10px; font-size: 0.75rem; font-weight: 600; }
+
+  /* ── WORKFLOW STEPS ──────────────────────────────────────── */
+  .steps { display: flex; flex-direction: column; gap: 0; }
+  .step { display: flex; gap: 28px; align-items: flex-start; position: relative; padding-bottom: 36px; }
+  .step:last-child { padding-bottom: 0; }
+  .step:not(:last-child)::before {
+    content: ''; position: absolute; left: 27px; top: 56px; bottom: 0;
+    width: 2px; background: linear-gradient(to bottom, var(--green-300), var(--green-100));
+  }
+  .step-num {
+    width: 56px; height: 56px; border-radius: 50%; background: var(--green-500); color: white;
+    font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(30,132,73,0.35);
+  }
+  .step-content { flex: 1; background: white; border: 1.5px solid var(--green-100); border-radius: var(--radius); padding: 24px 28px; }
+  .step-content h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--green-900); margin-bottom: 8px; }
+  .step-content p { font-size: 0.9rem; color: var(--gray-600); line-height: 1.7; }
+  .step-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .step-tag { background: var(--green-50); border: 1px solid var(--green-100); border-radius: 12px; padding: 3px 10px; font-size: 0.75rem; color: var(--green-600); font-weight: 500; }
+
+  /* ── ALERT SYSTEM ────────────────────────────────────────── */
+  .alert-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .alert-card { border-radius: var(--radius); padding: 32px 28px; }
+  .alert-first { background: linear-gradient(135deg, #eafaf1, #d5f5e3); border: 2px solid var(--green-300); }
+  .alert-critical { background: linear-gradient(135deg, #fdf3f3, #fadbd8); border: 2px solid #e74c3c; }
+  .alert-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  .alert-first .alert-label { color: var(--green-600); }
+  .alert-critical .alert-label { color: var(--red-alert); }
+  .alert-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 12px; }
+  .alert-first h3 { color: var(--green-900); }
+  .alert-critical h3 { color: #922b21; }
+  .alert-card p { font-size: 0.9rem; line-height: 1.7; }
+  .alert-first p { color: var(--green-800); }
+  .alert-critical p { color: #7b241c; }
+  .alert-example {
+    margin-top: 16px; border-radius: var(--radius-sm); padding: 12px 16px;
+    font-size: 0.85rem; font-style: italic; font-weight: 500;
+  }
+  .alert-first .alert-example { background: rgba(39,174,96,0.12); color: var(--green-700); }
+  .alert-critical .alert-example { background: rgba(231,76,60,0.12); color: #922b21; }
+
+  /* ── AI COMPONENTS TABLE ─────────────────────────────────── */
+  .ai-table { width: 100%; border-collapse: collapse; border-radius: var(--radius); overflow: hidden; border: 1.5px solid var(--green-100); }
+  .ai-table th { background: var(--green-900); color: white; padding: 14px 20px; text-align: left; font-size: 0.88rem; font-weight: 600; }
+  .ai-table td { padding: 14px 20px; font-size: 0.88rem; border-bottom: 1px solid var(--green-100); vertical-align: top; }
+  .ai-table tr:last-child td { border-bottom: none; }
+  .ai-table tr:nth-child(even) td { background: var(--green-50); }
+  .ai-comp-name { font-weight: 600; color: var(--green-700); }
+
+  /* ── DESIGN THINKING ─────────────────────────────────────── */
+  .dt-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .dt-card { text-align: center; }
+  .dt-num {
+    width: 44px; height: 44px; border-radius: 50%; background: var(--green-500); color: white;
+    font-weight: 800; font-size: 1rem; display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 12px;
+  }
+  .dt-card h4 { font-size: 0.9rem; font-weight: 700; color: var(--green-900); margin-bottom: 6px; }
+  .dt-card p { font-size: 0.78rem; color: var(--gray-600); line-height: 1.5; }
+  .dt-arrow { display: flex; align-items: center; justify-content: center; color: var(--green-300); font-size: 1.4rem; padding-top: 12px; }
+
+  /* ── RESPONSIBLE AI ──────────────────────────────────────── */
+  .rai-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .rai-card { background: white; border: 1.5px solid var(--green-100); border-radius: var(--radius); padding: 24px; }
+  .rai-icon { font-size: 1.8rem; margin-bottom: 10px; }
+  .rai-card h4 { font-weight: 700; font-size: 0.95rem; color: var(--green-900); margin-bottom: 6px; }
+  .rai-card p { font-size: 0.83rem; color: var(--gray-600); line-height: 1.6; }
+
+  /* ── IMPACT TABLE ────────────────────────────────────────── */
+  .impact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .impact-card { border-radius: var(--radius); padding: 28px 24px; border: 1.5px solid; }
+  .impact-social { border-color: #a9dfbf; background: #eafaf1; }
+  .impact-economic { border-color: #f9e79f; background: #fef9e7; }
+  .impact-env { border-color: #a9dfbf; background: #eafaf1; }
+  .impact-community { border-color: #aed6f1; background: #ebf5fb; }
+  .impact-card h4 { font-weight: 700; font-size: 1rem; color: var(--green-900); margin-bottom: 8px; }
+  .impact-card p { font-size: 0.85rem; line-height: 1.6; color: var(--gray-700); }
+
+  /* ── PROTOTYPE SECTION ───────────────────────────────────── */
+  .proto-bg { background: linear-gradient(180deg, var(--dark) 0%, #16213e 100%); padding: 72px 0; }
+  .proto-inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+  .proto-inner .section-eyebrow { background: rgba(39,174,96,0.15); border-color: rgba(39,174,96,0.3); color: var(--green-300); }
+  .proto-inner .section-title { color: white; }
+  .proto-inner .section-sub { color: rgba(255,255,255,0.65); }
+  .proto-tabs { display: flex; gap: 8px; margin-bottom: 32px; flex-wrap: wrap; }
+  .proto-tab {
+    padding: 8px 20px; border-radius: 24px; font-size: 0.85rem; font-weight: 600;
+    border: 1.5px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.6);
+    background: transparent; cursor: pointer; transition: all 0.2s;
+  }
+  .proto-tab.active, .proto-tab:hover { background: var(--green-500); color: white; border-color: var(--green-500); }
+
+  /* Phone shell */
+  .phone-demo { display: flex; gap: 48px; align-items: flex-start; flex-wrap: wrap; }
+  .phone-shell {
+    width: 280px; flex-shrink: 0;
+    background: #1a1a2e; border-radius: 36px; padding: 12px;
+    border: 2px solid rgba(255,255,255,0.12);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+  .phone-notch { width: 80px; height: 24px; background: #0d0d1a; border-radius: 12px; margin: 0 auto 8px; }
+  .phone-screen { background: #f8f9fa; border-radius: 24px; overflow: hidden; min-height: 520px; }
+  .proto-desc { flex: 1; min-width: 260px; }
+  .proto-desc h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; font-weight: 700; color: white; margin-bottom: 12px; }
+  .proto-desc p { font-size: 0.9rem; color: rgba(255,255,255,0.65); line-height: 1.7; margin-bottom: 20px; }
+  .proto-feature { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
+  .proto-feature-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-400); margin-top: 6px; flex-shrink: 0; }
+  .proto-feature p { font-size: 0.87rem; color: rgba(255,255,255,0.7); line-height: 1.5; }
+  .proto-feature strong { color: white; }
+
+  /* ── App Screens ─────────────────────────────────────────── */
+  .app-screen { display: none; flex-direction: column; height: 520px; background: #f0f4f0; }
+  .app-screen.visible { display: flex; }
+
+  /* App Header */
+  .app-header { background: var(--green-700); color: white; padding: 12px 16px 10px; }
+  .app-header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .app-header-title { font-size: 0.75rem; opacity: 0.75; }
+  .app-header h2 { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 700; }
+
+  /* Dashboard Screen */
+  .app-body { padding: 12px; flex: 1; overflow-y: auto; }
+  .app-card { background: white; border-radius: 10px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .app-card-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-600); margin-bottom: 8px; }
+  .food-item { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid #f0f0f0; }
+  .food-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .food-emoji { font-size: 1.2rem; }
+  .food-info { flex: 1; }
+  .food-name { font-size: 0.8rem; font-weight: 600; color: var(--gray-800); }
+  .food-sub { font-size: 0.68rem; color: var(--gray-600); }
+  .food-badge { padding: 2px 8px; border-radius: 10px; font-size: 0.68rem; font-weight: 700; white-space: nowrap; }
+  .badge-ok { background: #d5f5e3; color: #1e8449; }
+  .badge-warn { background: #fef9e7; color: #d68910; }
+  .badge-danger { background: #fadbd8; color: #c0392b; }
+  .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 10px; }
+  .stat-box { background: white; border-radius: 8px; padding: 10px 6px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .stat-num { font-size: 1.2rem; font-weight: 800; color: var(--green-500); font-family: 'Space Grotesk', sans-serif; }
+  .stat-label { font-size: 0.6rem; color: var(--gray-600); margin-top: 2px; }
+
+  /* App Bottom Nav */
+  .app-nav { background: white; border-top: 1px solid #e8e8e8; display: flex; padding: 8px 0 4px; }
+  .app-nav-item { flex: 1; text-align: center; cursor: pointer; }
+  .app-nav-icon { font-size: 1.1rem; }
+  .app-nav-label { font-size: 0.58rem; color: var(--gray-600); margin-top: 1px; }
+  .app-nav-item.active .app-nav-label { color: var(--green-500); }
+  .app-nav-item.active .app-nav-icon { filter: drop-shadow(0 0 3px rgba(30,132,73,0.5)); }
+
+  /* Notification Screen */
+  .notif-item { display: flex; gap: 10px; align-items: flex-start; padding: 10px; border-radius: 8px; margin-bottom: 8px; }
+  .notif-warn { background: #fef9e7; border-left: 3px solid var(--amber); }
+  .notif-danger { background: #fdf3f3; border-left: 3px solid var(--red-alert); }
+  .notif-ok { background: var(--green-50); border-left: 3px solid var(--green-400); }
+  .notif-icon { font-size: 1.1rem; flex-shrink: 0; }
+  .notif-text { flex: 1; }
+  .notif-title { font-size: 0.78rem; font-weight: 700; color: var(--gray-800); }
+  .notif-body { font-size: 0.68rem; color: var(--gray-600); margin-top: 2px; line-height: 1.4; }
+  .notif-time { font-size: 0.6rem; color: var(--gray-300); margin-top: 4px; }
+
+  /* Recipe Screen */
+  .recipe-card { background: white; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .recipe-header { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
+  .recipe-emoji { font-size: 1.8rem; }
+  .recipe-title { font-size: 0.85rem; font-weight: 700; color: var(--green-900); }
+  .recipe-sub { font-size: 0.68rem; color: var(--gray-600); }
+  .recipe-ingredients { display: flex; flex-wrap: wrap; gap: 4px; }
+  .recipe-ing-tag { background: var(--green-50); border: 1px solid var(--green-100); border-radius: 10px; padding: 2px 8px; font-size: 0.65rem; color: var(--green-700); }
+  .recipe-btn { width: 100%; margin-top: 8px; background: var(--green-500); color: white; border: none; border-radius: 6px; padding: 6px; font-size: 0.72rem; font-weight: 600; cursor: pointer; }
+
+  /* Add Item Screen */
+  .add-form { padding: 12px; }
+  .form-label { font-size: 0.7rem; font-weight: 600; color: var(--gray-700); margin-bottom: 4px; display: block; }
+  .form-input { width: 100%; border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 8px 10px; font-size: 0.8rem; color: var(--gray-800); margin-bottom: 10px; outline: none; font-family: 'Inter', sans-serif; }
+  .form-input:focus { border-color: var(--green-400); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .scan-btn { width: 100%; background: var(--green-50); border: 1.5px dashed var(--green-300); border-radius: 8px; padding: 14px; text-align: center; font-size: 0.8rem; color: var(--green-600); font-weight: 600; cursor: pointer; margin-bottom: 10px; }
+  .submit-btn { width: 100%; background: var(--green-500); color: white; border: none; border-radius: 8px; padding: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer; }
+
+  /* ── IMPACT STATEMENT ────────────────────────────────────── */
+  .impact-statement {
+    background: linear-gradient(135deg, var(--green-50), var(--green-100));
+    border: 2px solid var(--green-200); border-radius: var(--radius); padding: 40px 48px;
+    text-align: center; margin: 0 48px;
+  }
+  .impact-statement p { font-size: 1.05rem; line-height: 1.8; color: var(--green-900); max-width: 700px; margin: 0 auto; font-style: italic; }
+
+  /* ── CONCLUSION FOOTER ───────────────────────────────────── */
+  .conclusion-footer { background: var(--green-900); color: white; text-align: center; padding: 56px 48px; }
+  .conclusion-footer h2 { font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 16px; }
+  .conclusion-footer h2 span { color: var(--green-300); }
+  .conclusion-footer p { opacity: 0.75; font-size: 0.95rem; max-width: 600px; margin: 0 auto 24px; line-height: 1.7; }
+  .footer-meta { font-size: 0.78rem; opacity: 0.45; margin-top: 32px; }
+
+  /* ── RESPONSIVE ──────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .section { padding: 48px 20px; }
+    .hero { padding: 52px 20px 44px; }
+    nav { padding: 0 16px; }
+    .nav-links { display: none; }
+    .alert-grid, .impact-grid { grid-template-columns: 1fr; }
+    .dt-grid { grid-template-columns: 1fr 1fr; }
+    .rai-grid { grid-template-columns: 1fr; }
+    .info-grid { grid-template-columns: 1fr; }
+    .phone-demo { flex-direction: column; align-items: center; }
+    .proto-inner { padding: 0 20px; }
+    .impact-statement { margin: 0 20px; padding: 28px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">🌿 EcoBite AI <span>Project Report & Prototype</span></div>
+  <div class="nav-links">
+    <a href="#overview" class="active">Overview</a>
+    <a href="#problem">Problem</a>
+    <a href="#sdg">SDG</a>
+    <a href="#solution">Solution</a>
+    <a href="#prototype">Prototype</a>
+    <a href="#impact">Impact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">1M1B AI for Sustainability Virtual Internship</div>
+  <h1>EcoBite <span>AI</span></h1>
+  <p>Smart Refrigerator Food Waste Reduction System — an AI-powered assistant that monitors stored food, predicts expiry, and ensures nothing goes to waste.</p>
+  <div class="hero-tags">
+    <span class="hero-tag">IBM SkillsBuild × AICTE</span>
+    <span class="hero-tag">🎯 SDG 12 — Responsible Consumption</span>
+    <span class="hero-tag">🌱 Idea-Based AI Solution</span>
+  </div>
+  <div class="hero-nav-btns">
+    <a href="#solution" class="btn btn-primary">🔬 View Solution</a>
+    <a href="#prototype" class="btn btn-outline">📱 Interactive Prototype</a>
+    <a href="#sdg" class="btn btn-outline">🌍 SDG Alignment</a>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<div id="overview" class="section">
+  <span class="section-eyebrow">Project Overview</span>
+  <h2 class="section-title">Student & Project Details</h2>
+  <div class="divider"></div>
+  <div class="info-grid">
+    <div class="info-label">Student Name</div><div class="info-val">Sherin Mary P.J</div>
+    <div class="info-label">College Name</div><div class="info-val">Shrimathi Devkunvar Nanalal Bhatt Vaishnav College for Women</div>
+    <div class="info-label">Internship Program</div><div class="info-val">1M1B AI for Sustainability Virtual Internship</div>
+    <div class="info-label">Organisation</div><div class="info-val">IBM SkillsBuild & AICTE</div>
+    <div class="info-label">Project Title</div><div class="info-val">EcoBite AI — Smart Refrigerator Food Waste Reduction System</div>
+    <div class="info-label">Primary SDG</div><div class="info-val">SDG 12 — Responsible Consumption and Production</div>
+    <div class="info-label">Project Type</div><div class="info-val">Idea-Based AI Solution with Interactive Prototype</div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<div style="background: var(--gray-100); padding: 4px 0;" id="problem">
+<div class="section">
+  <span class="section-eyebrow">The Problem</span>
+  <h2 class="section-title">Food Waste Is a Silent Crisis</h2>
+  <p class="section-sub">Every day, households discard perfectly edible food because they forget what is stored in their refrigerators or fail to notice expiry dates in time. This causes real financial loss and serious environmental damage.</p>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="problem-icon">🧊</div>
+      <h3>Forgotten Food</h3>
+      <p>Items pushed to the back of the fridge are forgotten entirely until they spoil — especially in busy households.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">🔔</div>
+      <h3>No Smart Alerts</h3>
+      <p>No affordable system proactively alerts users before food becomes unusable. Current fridges only cool — they offer zero intelligence.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">💸</div>
+      <h3>Financial Loss</h3>
+      <p>Wasted food means wasted money — a significant burden for middle-income and low-income households who cannot afford it.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">🌍</div>
+      <h3>Environmental Damage</h3>
+      <p>Food decomposing in landfills produces methane — a greenhouse gas far more potent than CO₂, accelerating climate change.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">📦</div>
+      <h3>Poor Inventory Management</h3>
+      <p>Families over-purchase groceries without knowing what they already have, leading to duplication and avoidable waste.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">👴</div>
+      <h3>Vulnerable Users</h3>
+      <p>Elderly individuals, students, and working professionals struggle most with tracking food storage systematically.</p>
+    </div>
+  </div>
+
+  <div style="margin-top:40px; background: white; border-left: 4px solid var(--green-500); border-radius: 12px; padding: 24px 28px;">
+    <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--green-500);margin-bottom:8px;">Problem Statement</div>
+    <p style="font-size:1.05rem;color:var(--green-900);font-weight:600;font-style:italic;line-height:1.7;">"How might we use Artificial Intelligence to monitor household food storage and send timely alerts so that families can reduce food wastage and practise more responsible, sustainable consumption?"</p>
+  </div>
+</div>
+</div>
+
+<!-- SDG -->
+<div id="sdg" class="section">
+  <span class="section-eyebrow">SDG Alignment</span>
+  <h2 class="section-title">Supporting the United Nations SDGs</h2>
+  <p class="section-sub">EcoBite AI directly supports SDG 12 Target 12.3 — halving per-capita global food waste by 2030. It also contributes to three secondary SDGs through its broader social and environmental impact.</p>
+  <div class="divider"></div>
+  <table class="sdg-table">
+    <thead>
+      <tr>
+        <th>SDG</th><th>Goal</th><th>Category</th><th>Connection to EcoBite AI</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>SDG 12</strong></td>
+        <td>Responsible Consumption & Production</td>
+        <td><span class="badge-primary">Primary</span></td>
+        <td>Directly reduces household food waste, promotes timely consumption, and builds sustainable food management habits at the individual level. Supports Target 12.3.</td>
+      </tr>
+      <tr>
+        <td><strong>SDG 2</strong></td>
+        <td>Zero Hunger</td>
+        <td><span class="badge-secondary">Secondary</span></td>
+        <td>Reducing food waste preserves edible food for consumption or donation, improving food availability and contributing to community food security.</td>
+      </tr>
+      <tr>
+        <td><strong>SDG 11</strong></td>
+        <td>Sustainable Cities & Communities</td>
+        <td><span class="badge-secondary">Secondary</span></td>
+        <td>Reducing household waste at scale leads to lower landfill burden, cleaner urban environments, and more sustainable community living.</td>
+      </tr>
+      <tr>
+        <td><strong>SDG 13</strong></td>
+        <td>Climate Action</td>
+        <td><span class="badge-secondary">Secondary</span></td>
+        <td>Less food in landfills means reduced methane emissions — one of the most potent greenhouse gases — directly contributing to climate change mitigation.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SOLUTION -->
+<div style="background:var(--gray-100);padding:4px 0;" id="solution">
+<div class="section">
+  <span class="section-eyebrow">The AI Solution</span>
+  <h2 class="section-title">Introducing EcoBite AI</h2>
+  <p class="section-sub">EcoBite AI integrates an AI-powered smart refrigerator with a companion mobile app via IoT connectivity — transforming a passive appliance into an active food management partner. The system works across five intelligent stages.</p>
+  <div class="divider"></div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>Food Registration</h3>
+        <p>When a food item is placed inside the refrigerator, the user registers it using the EcoBite AI mobile app — via manual entry or barcode/QR scanning. The system records the food name, category, quantity, storage date, expiry date, and the specific refrigerator compartment it is stored in.</p>
+        <div class="step-tags">
+          <span class="step-tag">📱 Mobile App</span>
+          <span class="step-tag">📷 Barcode Scan</span>
+          <span class="step-tag">Entity Extraction AI</span>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>Cloud Synchronisation via IoT</h3>
+        <p>The smart refrigerator synchronises all registered food data with the mobile application through an IoT connector in real time. Users can view their complete food inventory from anywhere, including items stored, quantities, days remaining before expiry, and compartment locations.</p>
+        <div class="step-tags">
+          <span class="step-tag">☁️ Cloud Sync</span>
+          <span class="step-tag">📡 IoT Connectivity</span>
+          <span class="step-tag">Real-Time Updates</span>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>AI-Based Monitoring & Analysis</h3>
+        <p>Artificial Intelligence continuously analyses the stored food inventory. The AI identifies foods nearing expiry, assigns a consumption priority score to each item, detects high-risk items most likely to be wasted, and recognises recurring household food waste patterns to improve future recommendations.</p>
+        <div class="step-tags">
+          <span class="step-tag">🤖 AI Monitoring</span>
+          <span class="step-tag">Priority Ranking</span>
+          <span class="step-tag">Pattern Detection</span>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h3>Two-Stage Smart Notification System</h3>
+        <div class="alert-grid" style="margin-top:16px;">
+          <div class="alert-card alert-first">
+            <div class="alert-label">🔔 First Alert</div>
+            <h3>7 Days Before Expiry</h3>
+            <p>The mobile app sends a push notification reminding the user to consume the food item soon.</p>
+            <div class="alert-example">"Your milk will expire in 7 days. Consider using it this week."</div>
+          </div>
+          <div class="alert-card alert-critical">
+            <div class="alert-label">🚨 Critical Alert</div>
+            <h3>1–2 Days Before Expiry</h3>
+            <p>If food remains unconsumed, the specific refrigerator compartment begins blinking red — impossible to miss even without the phone.</p>
+            <div class="alert-example">🔴 Upper compartment blinks red → food in upper section critically close to expiry.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h3>AI Recommendations & Decision Support</h3>
+        <p>After delivering alerts, EcoBite AI goes further — generating recipe suggestions using items closest to expiry, providing food storage tips to extend shelf life, recommending donation options for surplus food, and sharing personalised waste reduction insights based on the household's historical usage patterns.</p>
+        <div class="step-tags">
+          <span class="step-tag">👨‍🍳 Recipe Suggestions</span>
+          <span class="step-tag">🤝 Donation Advice</span>
+          <span class="step-tag">Conversational AI</span>
+          <span class="step-tag">Generative AI</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- AI COMPONENTS -->
+<div class="section">
+  <span class="section-eyebrow">AI Technology</span>
+  <h2 class="section-title">Why Artificial Intelligence?</h2>
+  <p class="section-sub">Traditional refrigerators only cool food — they provide no intelligence about what is stored, how long it has been there, or when it needs to be consumed. EcoBite AI uses multiple AI components to transform this passive appliance into an active sustainability tool.</p>
+  <div class="divider"></div>
+  <table class="ai-table">
+    <thead>
+      <tr><th>AI Component</th><th>Application in EcoBite AI</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="ai-comp-name">Prompt Engineering</td><td>Generating contextual recipe suggestions and food storage tips based on the specific items available in the user's inventory at any given time.</td></tr>
+      <tr><td class="ai-comp-name">Conversational AI</td><td>A chatbot assistant that answers natural language questions: "What food is expiring soon?", "What can I cook with what I have?", "How should I store this?"</td></tr>
+      <tr><td class="ai-comp-name">Entity Extraction</td><td>Identifying and extracting food item names, quantities, expiry dates, and compartment locations from user inputs, barcode scans, and product labels.</td></tr>
+      <tr><td class="ai-comp-name">Recommendation System</td><td>Suggesting personalised recipes, donation options, and storage improvements based on the user's inventory, consumption history, and household behaviour patterns.</td></tr>
+      <tr><td class="ai-comp-name">AI Decision Support</td><td>Ranking food items by consumption urgency, flagging high-risk items, and generating personalised waste reduction insights for each household.</td></tr>
+      <tr><td class="ai-comp-name">IoT Data Processing</td><td>Continuously receiving and processing food inventory data from the smart refrigerator's connected sensors and controlling compartment LED alert indicators.</td></tr>
+      <tr><td class="ai-comp-name">Notification Automation</td><td>Automatically triggering two-stage push notifications and physical LED alerts based on AI-calculated expiry risk scores assigned to each food item.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- DESIGN THINKING -->
+<div style="background:var(--gray-100);padding:4px 0;">
+<div class="section">
+  <span class="section-eyebrow">Design Thinking</span>
+  <h2 class="section-title">Human-Centred Design Process</h2>
+  <p class="section-sub">EcoBite AI was developed using the Design Thinking framework — grounding the solution in real user needs rather than assumptions.</p>
+  <div class="divider"></div>
+  <div class="dt-grid">
+    <div class="dt-card">
+      <div class="dt-num">1</div>
+      <h4>Empathise</h4>
+      <p>Understood who faces food waste — families, students, professionals, elderly — and why the problem persists in every household.</p>
+    </div>
+    <div class="dt-card">
+      <div class="dt-num">2</div>
+      <h4>Define</h4>
+      <p>Identified the core gap: refrigerators cool food but offer no intelligence, tracking, or reminders to prevent waste.</p>
+    </div>
+    <div class="dt-card">
+      <div class="dt-num">3</div>
+      <h4>Ideate</h4>
+      <p>Brainstormed an AI-powered system with IoT connectivity, two-stage smart alerts, recipe suggestions, and donation recommendations.</p>
+    </div>
+    <div class="dt-card">
+      <div class="dt-num">4</div>
+      <h4>Prototype</h4>
+      <p>Designed mobile app screens, LED compartment indicators, system workflow, and an interactive sustainability dashboard.</p>
+    </div>
+    <div class="dt-card">
+      <div class="dt-num">5</div>
+      <h4>Test & Refine</h4>
+      <p>Evaluate waste reduction, notification response rates, user satisfaction, and improvements in food purchasing behaviour.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- RESPONSIBLE AI -->
+<div class="section">
+  <span class="section-eyebrow">Responsible AI</span>
+  <h2 class="section-title">Responsible AI Considerations</h2>
+  <p class="section-sub">Every aspect of EcoBite AI is designed with Responsible AI principles embedded from the ground up.</p>
+  <div class="divider"></div>
+  <div class="rai-grid">
+    <div class="rai-card">
+      <div class="rai-icon">⚖️</div>
+      <h4>Fairness</h4>
+      <p>EcoBite AI works equally for all users regardless of age, language, literacy level, or household income. Recommendations are inclusive and do not assume specific cultural food preferences.</p>
+    </div>
+    <div class="rai-card">
+      <div class="rai-icon">🔍</div>
+      <h4>Transparency</h4>
+      <p>The system clearly explains why each food item is flagged as a priority — displaying the exact number of days remaining and the reason for each alert. Users are never left guessing.</p>
+    </div>
+    <div class="rai-card">
+      <div class="rai-icon">🔒</div>
+      <h4>Privacy</h4>
+      <p>All household food inventory data is stored securely and is never shared with third parties without explicit user consent. No personal identity information is collected beyond what is needed.</p>
+    </div>
+    <div class="rai-card">
+      <div class="rai-icon">✅</div>
+      <h4>Ethics</h4>
+      <p>EcoBite AI promotes responsible and healthy consumption habits. It provides only safe, verified food handling advice and never encourages unsafe storage or consumption of expired items.</p>
+    </div>
+    <div class="rai-card">
+      <div class="rai-icon">♿</div>
+      <h4>Accessibility</h4>
+      <p>The app interface is designed for simplicity — supporting elderly users and those with limited digital literacy through large text options, voice-based interaction, and easy navigation.</p>
+    </div>
+    <div class="rai-card">
+      <div class="rai-icon">🌱</div>
+      <h4>Environmental Responsibility</h4>
+      <p>The core purpose of the solution is environmental — reducing food waste and the greenhouse gas emissions associated with food decomposition in landfills at the household level.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PROTOTYPE -->
+<div class="proto-bg" id="prototype">
+  <div class="proto-inner">
+    <span class="section-eyebrow">Interactive Prototype</span>
+    <h2 class="section-title" style="color:white;">EcoBite AI Mobile App Demo</h2>
+    <p class="section-sub">Explore the interactive prototype of the EcoBite AI mobile application. Click the tabs below to navigate through different screens of the app.</p>
+
+    <div class="proto-tabs">
+      <button class="proto-tab active" onclick="showScreen('dashboard', this)">📊 Dashboard</button>
+      <button class="proto-tab" onclick="showScreen('notifications', this)">🔔 Notifications</button>
+      <button class="proto-tab" onclick="showScreen('recipes', this)">👨‍🍳 AI Recipes</button>
+      <button class="proto-tab" onclick="showScreen('add', this)">➕ Add Food</button>
+    </div>
+
+    <div class="phone-demo">
+      <!-- Phone Shell -->
+      <div class="phone-shell">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+
+          <!-- DASHBOARD SCREEN -->
+          <div class="app-screen visible" id="screen-dashboard">
+            <div class="app-header">
+              <div class="app-header-top">
+                <div class="app-header-title">Good morning! 👋</div>
+                <div style="font-size:0.7rem;opacity:0.7;">Sat, 28 Jun</div>
+              </div>
+              <h2>Food Inventory</h2>
+            </div>
+            <div class="app-body">
+              <div class="stats-row">
+                <div class="stat-box">
+                  <div class="stat-num" style="color:var(--green-500);">12</div>
+                  <div class="stat-label">Items Stored</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-num" style="color:var(--amber);">3</div>
+                  <div class="stat-label">Expiring Soon</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-num" style="color:var(--red-alert);">1</div>
+                  <div class="stat-label">Critical</div>
+                </div>
+              </div>
+              <div class="app-card">
+                <div class="app-card-title">🚨 Needs Attention</div>
+                <div class="food-item">
+                  <div class="food-emoji">🥛</div>
+                  <div class="food-info">
+                    <div class="food-name">Full Cream Milk</div>
+                    <div class="food-sub">Upper shelf · 500ml</div>
+                  </div>
+                  <span class="food-badge badge-danger">1 day left</span>
+                </div>
+                <div class="food-item">
+                  <div class="food-emoji">🥬</div>
+                  <div class="food-info">
+                    <div class="food-name">Spinach</div>
+                    <div class="food-sub">Vegetable tray · 200g</div>
+                  </div>
+                  <span class="food-badge badge-warn">3 days left</span>
+                </div>
+                <div class="food-item">
+                  <div class="food-emoji">🧀</div>
+                  <div class="food-info">
+                    <div class="food-name">Cheddar Cheese</div>
+                    <div class="food-sub">Upper shelf · 250g</div>
+                  </div>
+                  <span class="food-badge badge-warn">5 days left</span>
+                </div>
+              </div>
+              <div class="app-card">
+                <div class="app-card-title">✅ All Good</div>
+                <div class="food-item">
+                  <div class="food-emoji">🥚</div>
+                  <div class="food-info">
+                    <div class="food-name">Eggs (12 pack)</div>
+                    <div class="food-sub">Door tray · 12 eggs</div>
+                  </div>
+                  <span class="food-badge badge-ok">18 days</span>
+                </div>
+                <div class="food-item">
+                  <div class="food-emoji">🍎</div>
+                  <div class="food-info">
+                    <div class="food-name">Apples</div>
+                    <div class="food-sub">Fruit tray · 6 pcs</div>
+                  </div>
+                  <span class="food-badge badge-ok">22 days</span>
+                </div>
+                <div class="food-item">
+                  <div class="food-emoji">🫙</div>
+                  <div class="food-info">
+                    <div class="food-name">Greek Yogurt</div>
+                    <div class="food-sub">Upper shelf · 400g</div>
+                  </div>
+                  <span class="food-badge badge-ok">14 days</span>
+                </div>
+              </div>
+            </div>
+            <div class="app-nav">
+              <div class="app-nav-item active"><div class="app-nav-icon">🏠</div><div class="app-nav-label">Home</div></div>
+              <div class="app-nav-item"><div class="app-nav-icon">🔔</div><div class="app-nav-label">Alerts</div></div>
+              <div class="app-nav-item"><div class="app-nav-icon">👨‍🍳</div><div class="app-nav-label">Recipes</div></div>
+              <div class="app-nav-item"><div class="app-nav-icon">📊</div><div class="app-nav-label">Insights</div></div>
+            </div>
+          </div>
+
+          <!-- NOTIFICATIONS SCREEN -->
+          <div class="app-screen" id="screen-notifications">
+            <div class="app-header">
+              <div class="app-header-top">
+                <div class="app-header-title">Smart Alerts</div>
+                <div style="font-size:0.7rem;opacity:0.7;">3 unread</div>
+              </div>
+              <h2>Notifications</h2>
+            </div>
+            <div class="app-body">
+              <div class="notif-item notif-danger">
+                <div class="notif-icon">🚨</div>
+                <div class="notif-text">
+                  <div class="notif-title">Critical Expiry Alert!</div>
+                  <div class="notif-body">Your Full Cream Milk expires TOMORROW. The upper compartment LED is blinking red. Use it now or consider donating.</div>
+                  <div class="notif-time">Just now · Upper Shelf</div>
+                </div>
+              </div>
+              <div class="notif-item notif-warn">
+                <div class="notif-icon">⚠️</div>
+                <div class="notif-text">
+                  <div class="notif-title">Expiring in 3 Days</div>
+                  <div class="notif-body">Spinach (200g) will expire on 1 Jul. EcoBite AI suggests a spinach omelette or palak paneer recipe using your eggs and paneer.</div>
+                  <div class="notif-time">2 hours ago · Vegetable Tray</div>
+                </div>
+              </div>
+              <div class="notif-item notif-warn">
+                <div class="notif-icon">🔔</div>
+                <div class="notif-text">
+                  <div class="notif-title">Reminder: Cheddar Cheese</div>
+                  <div class="notif-body">Your Cheddar Cheese expires in 5 days. Consider using it in a sandwich, pasta, or omelette this week.</div>
+                  <div class="notif-time">Yesterday · Upper Shelf</div>
+                </div>
+              </div>
+              <div class="notif-item notif-ok">
+                <div class="notif-icon">✅</div>
+                <div class="notif-text">
+                  <div class="notif-title">Weekly Waste Report</div>
+                  <div class="notif-body">Great job! This week you saved 3 food items from being wasted. That's ₹180 saved and 0.6 kg of food waste avoided.</div>
+                  <div class="notif-time">2 days ago</div>
+                </div>
+              </div>
+              <div style="background:var(--green-50);border-radius:10px;padding:12px;text-align:center;">
+                <div style="font-size:0.72rem;color:var(--green-700);font-weight:600;">🌱 This week you prevented <strong>0.6 kg</strong> of food waste!</div>
+              </div>
+            </div>
+            <div class="app-nav">
+              <div class="app-nav-item"><div class="app-nav-icon">🏠</div><div class="app-nav-label">Home</div></div>
+              <div class="app-nav-item active"><div class="app-nav-icon">🔔</div><div class="app-nav-label">Alerts</div></div>
+              <div class="app-nav-item"><div class="app-nav-icon">👨‍🍳</div><div class="app-nav-label">Recipes</div></div>
+              <div class="app-nav-item"><div class="app-nav-icon">📊</div><div class="app-nav-label">Insights</div></div>
+            </div>
+          </div>
+
+          <!-- RECIPES SCREEN -->
+          <div class="app-screen" id="screen-recipes">
+            <div class="app-header">
+              <div class="app-header-top">
+                <div class="app-header-title">AI-Generated</div>
+                <div style="font-size:0.7rem;opacity:0.7;">Based on your fridge</div>
+              </div>
+              <h2>Recipe Suggestions</h2>
+            </div>
+            <div class="app-body">
+              <div style="background:var(--green-50);border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:0.72rem;color:var(--green-700);">
+                💡 Using items expiring soon: <strong>Milk, Spinach, Cheese</strong>
+              </div>
+              <div class="recipe-card">
+                <div class="recipe-header">
+                  <div class="recipe-emoji">🥞</div>
+                  <div>
+                    <div class="recipe-title">Creamy Spinach Omelette</div>
+                    <div class="recipe-sub">Uses: Spinach, Eggs, Cheese · 15 min</div>
+                  </div>
+                </div>
+                <div class="recipe-ingredients">
+                  <span class="recipe-ing-tag">🥬 Spinach ⚠️</span>
+                  <span class="recipe-ing-tag">🥚 2 Eggs</span>
+                  <span class="recipe-ing-tag">🧀 Cheese ⚠️</span>
+                  <span class="recipe-ing-tag">Salt & Pepper</span>
+                </div>
+                <button class="recipe-btn">View Full Recipe →</button>
+              </div>
+              <div class="recipe-card">
+                <div class="recipe-header">
+                  <div class="recipe-emoji">🥛</div>
+                  <div>
+                    <div class="recipe-title">Homemade Paneer</div>
+                    <div class="recipe-sub">Uses: Milk · 20 min · Great way to use milk!</div>
+                  </div>
+                </div>
+                <div class="recipe-ingredients">
+                  <span class="recipe-ing-tag">🥛 Milk 🚨</span>
+                  <span class="recipe-ing-tag">Lemon Juice</span>
+                </div>
+                <button class="recipe-btn">View Full Recipe →</button>
+              </div>
+              <div class="recipe-card">
+                <div class="recipe-header">
+                  <div class="recipe-emoji">🥗</div>
+                  <div>
+                    <div class="recipe-title">Cheese & Spinach Salad</div>
+                    <div class="recipe-sub">Uses: Spinach, Cheese · 10 min · No cooking!</div>
+                  </div>
+                </div>
+                <div class="recipe-ingredients">
+                  <span class="recipe-ing-tag">🥬 Spinach ⚠️</span>
+                  <span class="recipe-ing-tag">🧀 Cheese ⚠️</span>
+                  <span class="recipe-ing-tag">🍎 Apple</span>
+                  <span class="recipe-ing-tag">Olive Oil</span>
+                </div>
+                <button class="recipe-btn">View Full Recipe →</button>
+              </div>
+            </div>
+            <div class="app-nav">
+              <div class="app-nav-item"><div class="app-nav-icon">🏠</div><div class="app-nav-label">Home</div></div>
+              <div class="app-nav-item"><div class="app-nav-icon">🔔</div><div class="app-nav-label">Alerts</div></div>
+              <div class="app-nav-item active"><div class="app-nav-icon">👨‍🍳</div><div class="app-nav-label">Recipes</div></div>
+              <div class="app-nav-item"><div class="app-nav-icon">📊</div><div class="app-nav-label">Insights</div></div>
+            </div>
+          </div>
+
+          <!-- ADD FOOD SCREEN -->
+          <div class="app-screen" id="screen-add">
+            <div class="app-header">
+              <div class="app-header-top">
+                <div class="app-header-title">Register New Item</div>
+              </div>
+              <h2>Add Food Item</h2>
+            </div>
+            <div class="app-body">
+              <div class="add-form">
+                <div class="scan-btn">📷 Tap to Scan Barcode / QR Code</div>
+                <label class="form-label">Food Item Name</label>
+                <input class="form-input" type="text" placeholder="e.g. Full Cream Milk" value="Full Cream Milk"/>
+                <div class="form-row">
+                  <div>
+                    <label class="form-label">Quantity</label>
+                    <input class="form-input" type="text" placeholder="e.g. 500ml" value="500 ml"/>
+                  </div>
+                  <div>
+                    <label class="form-label">Category</label>
+                    <input class="form-input" type="text" placeholder="e.g. Dairy" value="Dairy"/>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div>
+                    <label class="form-label">Storage Date</label>
+                    <input class="form-input" type="text" value="27 Jun 2026"/>
+                  </div>
+                  <div>
+                    <label class="form-label">Expiry Date</label>
+                    <input class="form-input" type="text" value="29 Jun 2026"/>
+                  </div>
+                </div>
+                <label class="form-label">Compartment Location</label>
+                <input class="form-input" type="text" placeholder="e.g. Upper Shelf" value="Upper Shelf"/>
+                <div style="background:var(--green-50);border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:0.72rem;color:var(--green-700);">
+                  🤖 AI will monitor this item and alert you 7 days and 1–2 days before expiry.
+                </div>
+                <button class="submit-btn">✅ Register Food Item</button>
+              </div>
+            </div>
+            <div class="app-nav">
+              <div class="app-nav-item"><div class="app-nav-icon">🏠</div><div class="app-nav-label">Home</div></div>
+              <div class="app-nav-item"><div class="app-nav-icon">🔔</div><div class="app-nav-label">Alerts</div></div>
+              <div class="app-nav-item"><div class="app-nav-icon">👨‍🍳</div><div class="app-nav-label">Recipes</div></div>
+              <div class="app-nav-item active"><div class="app-nav-icon">➕</div><div class="app-nav-label">Add</div></div>
+            </div>
+          </div>
+
+        </div><!-- end phone-screen -->
+      </div><!-- end phone-shell -->
+
+      <!-- Description -->
+      <div class="proto-desc" id="proto-desc-dashboard">
+        <h3>📊 Food Inventory Dashboard</h3>
+        <p>The main dashboard gives users a complete real-time view of everything in their refrigerator — organised by expiry urgency, with colour-coded badges for instant understanding.</p>
+        <div class="proto-feature"><div class="proto-feature-dot"></div><p><strong>At-a-glance stats</strong> showing total items, items expiring soon, and critical items at the top.</p></div>
+        <div class="proto-feature"><div class="proto-feature-dot"></div><p><strong>Colour-coded badges:</strong> 🔴 Red = 1–2 days, 🟡 Amber = 3–6 days, 🟢 Green = safe.</p></div>
+        <div class="proto-feature"><div class="proto-feature-dot"></div><p><strong>Compartment tracking</strong> so users know exactly where each item is stored in the fridge.</p></div>
+        <div class="proto-feature"><div class="proto-feature-dot"></div><p><strong>IoT-synced in real time</strong> from the smart refrigerator's sensors via cloud connectivity.</p></div>
+      </div>
+
+      <div class="proto-desc" id="proto-desc-notifications" style="display:none">
+        <h3>🔔 Smart Notification Centre</h3>
+        <p>The two-stage alert system ensures no food item is ever forgotten — from a gentle 7-day reminder to an urgent critical alert when food is 1–2 days from expiry.</p>
+        <div class="proto-feature"><div class="proto-feature-dot"></div><p><strong>Critical alerts</strong> (red) for items expiring in 1–2 days — with the physical LED blink also triggered on the fridge compartment.</p></div>
+        <div class="proto-feature"><div class="proto-feature-dot"></div><p><strong>Warning alerts</strong> (amber) for items expiring within the week, with recipe suggestions included.</p></div>
+        <div class="proto-feature"><div class="proto-feature-dot"></div><p><strong>Weekly waste report</strong> showing food saved, money saved, and CO₂ impact avoided.</p></div>
+        <div class="proto-feature"><div class="proto-feature-dot"></div><p><strong>Donation suggestions</strong> for surplus items the household cannot consume in time.</p></div>
+      </div>
+
+      <div class="proto-desc" id="proto-desc-recipes" style="display:none">
+        <h3>👨‍🍳 AI Recipe Suggestions</h3>
+        <p>The AI recommendation engine generates personalised recipes using ingredients that are closest to their expiry date — turning the risk of waste into a cooking opportunity.</p>
+        <div class="proto-feature"><div class="proto-feature-dot"></div><p><strong>Expiry-first recipes:</strong> dishes are suggested based on which items need to be used most urgently.</p></div>
+        <div class="proto-feature"><div class="proto-feature-dot"></div><p><strong>Ingredient tags</strong> clearly show which items in the recipe are from the user's current inventory.</p></div>
+        <div class="proto-feature"><div class="proto-feature-dot"></div><p><strong>Powered by Generative AI</strong> — recipes are generated in real time using Prompt Engineering based on available inventory.</p></div>
+        <div class="proto-feature"><div class="proto-feature-dot"></div><p><strong>Conversational AI chatbot</strong> available to answer "What can I cook today?" in natural language.</p></div>
+      </div>
+
+      <div class="proto-desc" id="proto-desc-add" style="display:none">
+        <h3>➕ Food Registration Screen</h3>
+        <p>Users register food items quickly when they stock the fridge — either by manually entering details or scanning the barcode/QR code on the product packaging for instant autofill.</p>
+        <div class="proto-feature"><div class="proto-feature-dot"></div><p><strong>Barcode/QR scanning</strong> for fast registration — entity extraction AI auto-fills name, expiry, and category.</p></div>
+        <div class="proto-feature"><div class="proto-feature-dot"></div><p><strong>Compartment location</strong> is recorded so LED alerts blink on the correct physical section of the fridge.</p></div>
+        <div class="proto-feature"><div class="proto-feature-dot"></div><p><strong>AI confirmation</strong> shown to the user — letting them know monitoring has started and when alerts will trigger.</p></div>
+        <div class="proto-feature"><div class="proto-feature-dot"></div><p><strong>Syncs instantly</strong> to the cloud and the smart refrigerator via IoT, updating the inventory in real time.</p></div>
+      </div>
+
+    </div><!-- end phone-demo -->
+  </div>
+</div>
+
+<!-- IMPACT -->
+<div id="impact" class="section">
+  <span class="section-eyebrow">Expected Impact</span>
+  <h2 class="section-title">Impact at Scale</h2>
+  <p class="section-sub">When implemented across millions of households, EcoBite AI creates measurable impact across social, economic, environmental, and community dimensions.</p>
+  <div class="divider"></div>
+  <div class="impact-grid">
+    <div class="impact-card impact-social">
+      <h4>🤝 Social Impact</h4>
+      <p>Reduced household food waste and improved nutrition planning for families. Greater awareness of sustainable living practices among urban and rural communities. Better food management habits built gradually over time through AI-driven nudges.</p>
+    </div>
+    <div class="impact-card impact-economic">
+      <h4>💰 Economic Impact</h4>
+      <p>Significant reduction in grocery expenses through improved food utilisation. Better inventory planning prevents over-purchasing. Families can save hundreds of rupees per month by eliminating avoidable food waste — particularly significant for middle-income households.</p>
+    </div>
+    <div class="impact-card impact-env">
+      <h4>🌍 Environmental Impact</h4>
+      <p>Lower methane emissions from reduced food decomposition in landfills. Decreased solid waste at the household level. Improved resource utilisation — the energy, water, and land used to produce food is not wasted when food is actually consumed rather than discarded.</p>
+    </div>
+    <div class="impact-card impact-community">
+      <h4>🏘️ Community Impact</h4>
+      <p>Surplus food items nearing expiry are redirected to donation rather than disposal, contributing to local food security. Increased community awareness about food waste as an environmental, economic, and social issue affecting all households.</p>
+    </div>
+  </div>
+</div>
+
+<!-- IMPACT STATEMENT -->
+<div class="impact-statement">
+  <p>"EcoBite AI demonstrates that Artificial Intelligence, when applied thoughtfully and responsibly, can transform a mundane household appliance into a powerful force for sustainability — helping families save money, reduce waste, and play an active role in building a more responsible and sustainable world. This solution supports SDG 12, SDG 2, SDG 11, and SDG 13 through a single, accessible, AI-powered product."</p>
+</div>
+<br/>
+
+<!-- CONCLUSION -->
+<div class="conclusion-footer">
+  <h2>Eat Smart. <span>Waste Less.</span> Live Sustainably.</h2>
+  <p>EcoBite AI is not just a technology product — it is a step toward a more sustainable household culture. Technology working quietly in the background, helping people make better decisions every day.</p>
+  <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:24px;">
+    <span style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:6px 16px;font-size:0.8rem;">🎯 SDG 12 — Primary</span>
+    <span style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:6px 16px;font-size:0.8rem;">🌱 SDG 2, 11, 13 — Secondary</span>
+    <span style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:6px 16px;font-size:0.8rem;">🤖 7 AI Components</span>
+    <span style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:6px 16px;font-size:0.8rem;">📱 IoT + Mobile App</span>
+  </div>
+  <div class="footer-meta">1M1B AI for Sustainability Virtual Internship · IBM SkillsBuild & AICTE · EcoBite AI Project Report</div>
+</div>
+
+<script>
+  function showScreen(name, tabEl) {
+    // Hide all screens
+    document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('visible'));
+    // Hide all desc
+    document.querySelectorAll('.proto-desc').forEach(d => d.style.display = 'none');
+    // Deactivate tabs
+    document.querySelectorAll('.proto-tab').forEach(t => t.classList.remove('active'));
+
+    // Show selected
+    document.getElementById('screen-' + name).classList.add('visible');
+    document.getElementById('proto-desc-' + name).style.display = 'block';
+    tabEl.classList.add('active');
+  }
+
+  // Highlight active nav link on scroll
+  const sections = document.querySelectorAll('[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) current = s.id; });
+    navLinks.forEach(a => {
+      a.classList.remove('active');
+      if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
