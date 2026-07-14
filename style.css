@@ -1,0 +1,132 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    display:flex;
+    min-height:100vh;
+    background:linear-gradient(135deg,#00c6ff,#0072ff);
+}
+
+/* Sidebar */
+.sidebar{
+    width:250px;
+    background:#0f172a;
+    color:white;
+    padding:20px;
+}
+
+.logo{
+    text-align:center;
+    font-size:28px;
+    margin-bottom:30px;
+    font-weight:bold;
+}
+
+.menu a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:15px;
+    margin:10px 0;
+    border-radius:10px;
+    transition:.3s;
+}
+
+.menu a:hover{
+    background:#1e293b;
+}
+
+/* Main */
+.main{
+    flex:1;
+    padding:20px;
+}
+
+.topbar{
+    background:white;
+    padding:15px 25px;
+    border-radius:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.topbar h2{
+    color:#0072ff;
+}
+
+.toggle{
+    cursor:pointer;
+    font-size:22px;
+}
+
+/* Cards */
+.card{
+    background:white;
+    border-radius:20px;
+    padding:25px;
+    margin-bottom:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,.1);
+}
+
+.card h3{
+    color:#0072ff;
+    margin-bottom:15px;
+}
+
+input,
+textarea,
+select{
+    width:100%;
+    padding:12px;
+    margin-top:8px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:10px;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:#00c853;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#00a844;
+}
+
+.result{
+    margin-top:15px;
+    background:#e8fff1;
+    padding:15px;
+    border-radius:10px;
+}
+
+/* Dark Mode */
+.dark{
+    background:#111827;
+}
+
+.dark .topbar,
+.dark .card{
+    background:#1f2937;
+    color:white;
+}
+
+.dark input,
+.dark textarea,
+.dark select{
+    background:#374151;
+    color:white;
+    border:none;
+}

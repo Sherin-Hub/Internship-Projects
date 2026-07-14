@@ -1,0 +1,475 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MediBot AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0b1628;
+  --sidebar:#0d1f3c;
+  --card:#111e35;
+  --card2:#152240;
+  --accent:#00d4aa;
+  --accent2:#4f8ef7;
+  --red:#ff4d6a;
+  --yellow:#ffc94a;
+  --text:#e8f0fe;
+  --muted:#7a8fad;
+  --border:rgba(79,142,247,0.18);
+  --radius:14px;
+}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden;font-size:14px}
+.sidebar{width:240px;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:0;flex-shrink:0;overflow-y:auto}
+.logo{padding:22px 18px 16px;border-bottom:1px solid var(--border)}
+.logo h1{font-family:'Sora',sans-serif;font-size:17px;font-weight:700;color:#fff;letter-spacing:-0.3px}
+.logo span{font-size:11px;color:var(--muted);display:block;margin-top:2px}
+.lang-box{padding:14px 16px;border-bottom:1px solid var(--border)}
+.lang-box label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:6px}
+.lang-box select{width:100%;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-family:inherit;font-size:13px;cursor:pointer}
+.lang-box select:focus{outline:none;border-color:var(--accent2)}
+nav{padding:12px 10px;flex:1}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;color:var(--muted);transition:all .2s;margin-bottom:2px;font-size:13.5px;font-weight:500;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:rgba(79,142,247,0.1);color:var(--text)}
+.nav-item.active{background:rgba(79,142,247,0.18);color:var(--accent2)}
+.nav-item .icon{font-size:17px;width:22px;text-align:center}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:var(--sidebar);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.topbar-title{font-family:'Sora',sans-serif;font-size:16px;font-weight:700;color:#fff}
+.topbar-sub{font-size:12px;color:var(--muted)}
+.dark-toggle{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text);cursor:pointer;font-size:13px;font-family:inherit}
+.content{flex:1;overflow-y:auto;padding:20px}
+.section{display:none}
+.section.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.card-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.badge{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+.badge-green{background:rgba(0,212,170,0.18);color:var(--accent)}
+.badge-red{background:rgba(255,77,106,0.18);color:var(--red)}
+.badge-blue{background:rgba(79,142,247,0.18);color:var(--accent2)}
+.about-hero{background:linear-gradient(135deg,rgba(79,142,247,0.2),rgba(0,212,170,0.1));border:1px solid var(--border);border-radius:var(--radius);padding:28px;text-align:center;margin-bottom:16px}
+.about-hero h2{font-family:'Sora',sans-serif;font-size:26px;font-weight:700;color:#fff;margin-bottom:8px}
+.about-hero p{color:var(--muted);font-size:14px;line-height:1.7;max-width:480px;margin:0 auto}
+.features-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.feat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px}
+.feat .fi{font-size:22px;margin-bottom:8px}
+.feat h4{font-size:13px;font-weight:600;color:#fff;margin-bottom:4px}
+.feat p{font-size:12px;color:var(--muted);line-height:1.5}
+.appt-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-group{margin-bottom:14px}
+.form-group label{font-size:12px;color:var(--muted);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.6px}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:inherit;font-size:13px}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--accent2)}
+.form-group select option{background:#1a2a4a}
+.time-slots{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px}
+.slot{background:var(--card2);border:1px solid var(--border);border-radius:7px;padding:7px;text-align:center;cursor:pointer;font-size:12px;color:var(--text);transition:all .2s}
+.slot:hover{border-color:var(--accent2);color:var(--accent2)}
+.slot.selected{background:rgba(79,142,247,0.2);border-color:var(--accent2);color:var(--accent2);font-weight:600}
+.slot.booked{background:rgba(255,77,106,0.1);border-color:rgba(255,77,106,0.3);color:var(--red);cursor:not-allowed;text-decoration:line-through;opacity:0.6}
+.btn{width:100%;padding:12px;border:none;border-radius:10px;background:var(--accent2);color:#fff;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:4px}
+.btn:hover{opacity:0.9;transform:translateY(-1px)}
+.btn-green{background:var(--accent);color:#0b1628}
+.toast{display:none;padding:12px 16px;border-radius:10px;font-size:13px;font-weight:500;margin-bottom:14px;animation:fadeIn .3s}
+.toast.show{display:flex;align-items:center;gap:8px}
+.toast.success{background:rgba(0,212,170,0.15);border:1px solid rgba(0,212,170,0.3);color:var(--accent)}
+.toast.error{background:rgba(255,77,106,0.15);border:1px solid rgba(255,77,106,0.3);color:var(--red)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.booked-list{margin-top:16px}
+.booked-item{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.booked-avatar{width:36px;height:36px;border-radius:50%;background:rgba(79,142,247,0.2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--accent2);flex-shrink:0}
+.booked-info h4{font-size:13px;font-weight:600;color:#fff}
+.booked-info p{font-size:11px;color:var(--muted)}
+.ai-chat{background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;min-height:160px;max-height:260px;overflow-y:auto;margin-bottom:12px}
+.ai-msg{display:flex;gap:10px;margin-bottom:12px;animation:fadeIn .3s}
+.ai-msg .avatar{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px}
+.ai-avatar{background:rgba(0,212,170,0.15);color:var(--accent)}
+.user-avatar{background:rgba(79,142,247,0.15);color:var(--accent2)}
+.ai-msg .bubble{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 13px;font-size:13px;line-height:1.6;color:var(--text);flex:1}
+.user-msg{flex-direction:row-reverse}
+.user-msg .bubble{background:rgba(79,142,247,0.12);text-align:right}
+.symptom-input-row{display:flex;gap:8px}
+.symptom-input-row input{flex:1;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:9px 14px;color:var(--text);font-family:inherit;font-size:13px}
+.symptom-input-row input:focus{outline:none;border-color:var(--accent)}
+.symptom-input-row button{background:var(--accent);color:#0b1628;border:none;border-radius:8px;padding:9px 16px;font-family:inherit;font-weight:600;cursor:pointer;white-space:nowrap;font-size:13px}
+.quick-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.chip{background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--muted);cursor:pointer;transition:all .2s}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.emg-header{background:linear-gradient(135deg,rgba(255,77,106,0.2),rgba(255,77,106,0.05));border:1px solid rgba(255,77,106,0.3);border-radius:var(--radius);padding:18px 20px;margin-bottom:16px;display:flex;align-items:center;gap:14px}
+.emg-icon{font-size:32px}
+.emg-header h3{font-size:16px;font-weight:700;color:#fff}
+.emg-header p{font-size:12px;color:var(--muted);margin-top:2px}
+.emg-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.emg-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .2s}
+.emg-card:hover{border-color:var(--red);transform:translateY(-2px)}
+.emg-card .num{font-size:24px;font-weight:700;color:var(--red);margin-bottom:4px}
+.emg-card .ename{font-size:13px;font-weight:600;color:#fff}
+.emg-card .edesc{font-size:11px;color:var(--muted);margin-top:3px}
+.emg-card .call-btn{margin-top:10px;background:rgba(255,77,106,0.15);border:1px solid rgba(255,77,106,0.3);color:var(--red);border-radius:7px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;width:100%;font-family:inherit;transition:background .2s}
+.emg-card .call-btn:hover{background:rgba(255,77,106,0.25)}
+.emg-tips{background:rgba(255,196,74,0.08);border:1px solid rgba(255,196,74,0.2);border-radius:10px;padding:14px 16px;margin-top:12px}
+.emg-tips h4{font-size:13px;font-weight:600;color:var(--yellow);margin-bottom:8px}
+.emg-tips li{font-size:12px;color:var(--muted);line-height:1.8;margin-left:16px}
+.home-hero{background:linear-gradient(135deg,rgba(79,142,247,0.15),rgba(0,212,170,0.1));border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px;text-align:center}
+.home-hero h2{font-family:'Sora',sans-serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:6px}
+.home-hero p{color:var(--muted);font-size:13px}
+.home-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.home-tile{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;cursor:pointer;transition:all .2s;text-align:center}
+.home-tile:hover{border-color:var(--accent2);transform:translateY(-2px)}
+.home-tile .tile-icon{font-size:28px;margin-bottom:8px}
+.home-tile h4{font-size:13px;font-weight:600;color:#fff;margin-bottom:4px}
+.home-tile p{font-size:11px;color:var(--muted)}
+.status-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.status-badge{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+.dot-green{background:var(--accent)}
+.dot-blue{background:var(--accent2)}
+.typing{display:flex;align-items:center;gap:4px;padding:8px}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.2s infinite}
+.typing span:nth-child(2){animation-delay:.2s}
+.typing span:nth-child(3){animation-delay:.4s}
+@keyframes pulse{0%,60%,100%{transform:scale(1);opacity:.5}30%{transform:scale(1.3);opacity:1}}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="logo">
+    <h1>🏥 MediBot AI</h1>
+    <span>Your Smart Health Assistant</span>
+  </div>
+  <div class="lang-box">
+    <label>Language / மொழி</label>
+    <select id="langSelect" onchange="changeLang(this.value)">
+      <option value="en">🇬🇧 English</option>
+      <option value="ta">🇮🇳 Tamil (தமிழ்)</option>
+      <option value="hi">🇮🇳 Hindi (हिंदी)</option>
+      <option value="te">🇮🇳 Telugu (తెలుగు)</option>
+      <option value="ml">🇮🇳 Malayalam (മലയാളം)</option>
+    </select>
+  </div>
+  <nav>
+    <button class="nav-item active" onclick="goTo('home',this)">
+      <span class="icon">🏠</span><span data-key="nav_home">Home</span>
+    </button>
+    <button class="nav-item" onclick="goTo('about',this)">
+      <span class="icon">ℹ️</span><span data-key="nav_about">About Bot</span>
+    </button>
+    <button class="nav-item" onclick="goTo('appointment',this)">
+      <span class="icon">📅</span><span data-key="nav_appt">Appointment</span>
+    </button>
+    <button class="nav-item" onclick="goTo('symptom',this)">
+      <span class="icon">💊</span><span data-key="nav_symptom">Symptom Checker</span>
+    </button>
+    <button class="nav-item" onclick="goTo('emergency',this)">
+      <span class="icon">🚑</span><span data-key="nav_emg">Emergency</span>
+    </button>
+  </nav>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title">🏥 MediBot AI — Healthcare Assistant</div>
+      <div class="topbar-sub">Powered by AI · Always consult a doctor for serious conditions</div>
+    </div>
+    <button class="dark-toggle" onclick="toggleDark()">🌙 Dark</button>
+  </div>
+
+  <div class="content">
+
+    <!-- HOME -->
+    <div class="section active" id="sec-home">
+      <div class="home-hero">
+        <h2 id="home-title">Welcome to MediBot AI 🏥</h2>
+        <p id="home-sub">Your intelligent healthcare companion — check symptoms, book appointments, and access emergency contacts instantly.</p>
+      </div>
+      <div class="status-row">
+        <div class="status-badge"><span class="dot dot-green"></span><span data-key="status_online">AI Online</span></div>
+        <div class="status-badge"><span class="dot dot-blue"></span><span data-key="status_secure">Secure & Private</span></div>
+        <div class="status-badge"><span class="dot dot-green"></span><span data-key="status_24">24/7 Available</span></div>
+      </div>
+      <div class="home-grid">
+        <div class="home-tile" onclick="goTo('symptom',null)">
+          <div class="tile-icon">💊</div>
+          <h4 data-key="tile_symptom">Symptom Checker</h4>
+          <p data-key="tile_symptom_desc">Describe your symptoms and get AI-powered guidance instantly.</p>
+        </div>
+        <div class="home-tile" onclick="goTo('appointment',null)">
+          <div class="tile-icon">📅</div>
+          <h4 data-key="tile_appt">Book Appointment</h4>
+          <p data-key="tile_appt_desc">Schedule a visit to top hospitals in your city.</p>
+        </div>
+        <div class="home-tile" onclick="goTo('emergency',null)">
+          <div class="tile-icon">🚑</div>
+          <h4 data-key="tile_emg">Emergency Contacts</h4>
+          <p data-key="tile_emg_desc">Quick access to emergency helpline numbers.</p>
+        </div>
+        <div class="home-tile" onclick="goTo('about',null)">
+          <div class="tile-icon">🤖</div>
+          <h4 data-key="tile_about">About MediBot</h4>
+          <p data-key="tile_about_desc">Learn how this AI assistant works and what it can do.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="section" id="sec-about">
+      <div class="about-hero">
+        <h2>🤖 MediBot AI</h2>
+        <p data-key="about_desc">MediBot is an intelligent AI-powered healthcare assistant designed to help users understand basic symptoms, book hospital appointments, and access emergency support — all in one place, in your preferred language.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feat"><div class="fi">💊</div><h4 data-key="feat1_title">Symptom Analysis</h4><p data-key="feat1_desc">Describe your symptoms in plain language and get basic health guidance with suggested medications and care tips.</p></div>
+        <div class="feat"><div class="fi">📅</div><h4 data-key="feat2_title">Smart Appointments</h4><p data-key="feat2_desc">Book time slots at top hospitals. The system prevents double-booking for the same doctor automatically.</p></div>
+        <div class="feat"><div class="fi">🚑</div><h4 data-key="feat3_title">Emergency Access</h4><p data-key="feat3_desc">One-click access to all Indian emergency helplines including ambulance, police, and hospital contacts.</p></div>
+        <div class="feat"><div class="fi">🌐</div><h4 data-key="feat4_title">Multilingual Support</h4><p data-key="feat4_desc">Available in Tamil, Hindi, Telugu, Malayalam, and English — serving patients across India.</p></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div class="card-title">⚠️ <span data-key="disclaimer_title">Important Disclaimer</span></div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7" data-key="disclaimer_text">MediBot AI provides general health information only. It is NOT a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional for serious or persistent conditions.</p>
+      </div>
+    </div>
+
+    <!-- APPOINTMENT -->
+    <div class="section" id="sec-appointment">
+      <div id="appt-toast" class="toast"></div>
+      <div class="card">
+        <div class="card-title">📅 <span data-key="appt_title">Book an Appointment</span></div>
+        <div class="appt-grid">
+          <div class="form-group">
+            <label data-key="lbl_name">Full Name</label>
+            <input id="appt_name" type="text" placeholder="John Doe">
+          </div>
+          <div class="form-group">
+            <label data-key="lbl_date">Date</label>
+            <input id="appt_date" type="date">
+          </div>
+          <div class="form-group">
+            <label data-key="lbl_hospital">Hospital</label>
+            <select id="appt_hospital">
+              <option value="">-- Select Hospital --</option>
+              <option value="Apollo">Apollo Hospital</option>
+              <option value="Fortis">Fortis Hospital</option>
+              <option value="Kauvery">Kauvery Hospital</option>
+              <option value="MIOT">MIOT International</option>
+              <option value="GovtGeneral">Govt. General Hospital</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label data-key="lbl_doctor">Doctor / Specialty</label>
+            <select id="appt_doctor">
+              <option value="">-- Select Doctor --</option>
+              <option value="Dr. Priya - General">Dr. Priya — General</option>
+              <option value="Dr. Raj - Cardiology">Dr. Raj — Cardiology</option>
+              <option value="Dr. Meena - Pediatrics">Dr. Meena — Pediatrics</option>
+              <option value="Dr. Kumar - Orthopedics">Dr. Kumar — Orthopedics</option>
+              <option value="Dr. Anand - Neurology">Dr. Anand — Neurology</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label data-key="lbl_place">Place / City</label>
+          <input id="appt_place" type="text" placeholder="Chennai">
+        </div>
+        <div class="form-group">
+          <label data-key="lbl_time">Select Time Slot</label>
+          <div class="time-slots" id="time-slots">
+            <div class="slot" onclick="selectSlot(this,'09:00 AM')">09:00 AM</div>
+            <div class="slot" onclick="selectSlot(this,'10:00 AM')">10:00 AM</div>
+            <div class="slot" onclick="selectSlot(this,'11:00 AM')">11:00 AM</div>
+            <div class="slot" onclick="selectSlot(this,'12:00 PM')">12:00 PM</div>
+            <div class="slot" onclick="selectSlot(this,'02:00 PM')">02:00 PM</div>
+            <div class="slot" onclick="selectSlot(this,'03:00 PM')">03:00 PM</div>
+            <div class="slot" onclick="selectSlot(this,'04:00 PM')">04:00 PM</div>
+            <div class="slot" onclick="selectSlot(this,'05:00 PM')">05:00 PM</div>
+          </div>
+        </div>
+        <button class="btn btn-green" onclick="bookAppointment()" data-key="btn_book">📅 Confirm Appointment</button>
+      </div>
+      <div class="booked-list" id="booked-list"></div>
+    </div>
+
+    <!-- SYMPTOM -->
+    <div class="section" id="sec-symptom">
+      <div class="card">
+        <div class="card-title">💊 <span data-key="sym_title">AI Symptom Checker</span> <span class="badge badge-green">AI Powered</span></div>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:12px" data-key="sym_desc">Type your symptom or temperature below. Try: "fever 99", "cough", "headache", "cold", "stomach pain"...</p>
+        <div class="quick-chips">
+          <div class="chip" onclick="quickSymptom('Fever')">🌡 Fever</div>
+          <div class="chip" onclick="quickSymptom('Cough')">😮‍💨 Cough</div>
+          <div class="chip" onclick="quickSymptom('Headache')">🤕 Headache</div>
+          <div class="chip" onclick="quickSymptom('Cold')">🤧 Cold</div>
+          <div class="chip" onclick="quickSymptom('Stomach Pain')">😣 Stomach Pain</div>
+          <div class="chip" onclick="quickSymptom('Sore Throat')">🤒 Sore Throat</div>
+          <div class="chip" onclick="quickSymptom('Back Pain')">🦴 Back Pain</div>
+          <div class="chip" onclick="quickSymptom('Dizziness')">💫 Dizziness</div>
+        </div>
+        <div class="ai-chat" id="ai-chat">
+          <div class="ai-msg">
+            <div class="avatar ai-avatar">🤖</div>
+            <div class="bubble" id="greeting-msg">Hello! I'm MediBot. Tell me your symptom and I'll provide basic health guidance. Remember: always consult a doctor for serious conditions. 🏥</div>
+          </div>
+        </div>
+        <div class="symptom-input-row">
+          <input id="sym-input" type="text" placeholder="Type symptom or e.g. 'fever 101 degrees'..." onkeydown="if(event.key==='Enter')analyzeSymptom()">
+          <button onclick="analyzeSymptom()">🔍 Analyze</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMERGENCY -->
+    <div class="section" id="sec-emergency">
+      <div class="emg-header">
+        <div class="emg-icon">🚨</div>
+        <div>
+          <h3 data-key="emg_title">Emergency Contacts</h3>
+          <p data-key="emg_sub">Tap any number to call immediately. These are India's official emergency helplines.</p>
+        </div>
+      </div>
+      <div class="emg-grid">
+        <div class="emg-card"><div class="num">108</div><div class="ename">🚑 Ambulance</div><div class="edesc">Free ambulance service — Tamil Nadu & nationwide</div><button class="call-btn" onclick="alert('Calling 108 — Ambulance Service')">📞 Call 108</button></div>
+        <div class="emg-card"><div class="num">100</div><div class="ename">👮 Police</div><div class="edesc">Emergency police assistance & crime reporting</div><button class="call-btn" onclick="alert('Calling 100 — Police Emergency')">📞 Call 100</button></div>
+        <div class="emg-card"><div class="num">102</div><div class="ename">🤱 Maternity</div><div class="edesc">Free ambulance for pregnant women & newborns</div><button class="call-btn" onclick="alert('Calling 102 — Maternity Ambulance')">📞 Call 102</button></div>
+        <div class="emg-card"><div class="num">104</div><div class="ename">🏥 Health Helpline</div><div class="edesc">Medical advice, hospital info & health queries</div><button class="call-btn" onclick="alert('Calling 104 — Health Helpline')">📞 Call 104</button></div>
+        <div class="emg-card"><div class="num">112</div><div class="ename">🆘 National Emergency</div><div class="edesc">Single number for all emergencies — police, fire, medical</div><button class="call-btn" onclick="alert('Calling 112 — National Emergency')">📞 Call 112</button></div>
+        <div class="emg-card"><div class="num">1800-599-0019</div><div class="ename">🧠 Mental Health</div><div class="edesc">iCall — free psychological support helpline</div><button class="call-btn" onclick="alert('Calling Mental Health Helpline')">📞 Call Now</button></div>
+        <div class="emg-card"><div class="num">1098</div><div class="ename">👧 Childline</div><div class="edesc">Emergency support for children in distress</div><button class="call-btn" onclick="alert('Calling 1098 — Childline')">📞 Call 1098</button></div>
+        <div class="emg-card"><div class="num">1091</div><div class="ename">👩 Women Helpline</div><div class="edesc">24/7 support for women in emergency situations</div><button class="call-btn" onclick="alert('Calling 1091 — Women Helpline')">📞 Call 1091</button></div>
+      </div>
+      <div class="emg-tips">
+        <h4>⚡ When to call 112?</h4>
+        <ul>
+          <li>Unconscious or unresponsive person</li>
+          <li>Severe chest pain or difficulty breathing</li>
+          <li>Heavy bleeding or trauma injury</li>
+          <li>Suspected stroke (face drooping, arm weakness, speech difficulty)</li>
+          <li>Severe allergic reaction or poisoning</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const translations={
+  en:{nav_home:"Home",nav_about:"About Bot",nav_appt:"Appointment",nav_symptom:"Symptom Checker",nav_emg:"Emergency",status_online:"AI Online",status_secure:"Secure & Private",status_24:"24/7 Available",tile_symptom:"Symptom Checker",tile_symptom_desc:"Describe your symptoms and get AI-powered guidance instantly.",tile_appt:"Book Appointment",tile_appt_desc:"Schedule a visit to top hospitals in your city.",tile_emg:"Emergency Contacts",tile_emg_desc:"Quick access to emergency helpline numbers.",tile_about:"About MediBot",tile_about_desc:"Learn how this AI assistant works and what it can do.",about_desc:"MediBot is an intelligent AI-powered healthcare assistant designed to help users understand basic symptoms, book hospital appointments, and access emergency support — all in one place, in your preferred language.",feat1_title:"Symptom Analysis",feat1_desc:"Describe your symptoms in plain language and get basic health guidance with suggested medications and care tips.",feat2_title:"Smart Appointments",feat2_desc:"Book time slots at top hospitals. The system prevents double-booking for the same doctor automatically.",feat3_title:"Emergency Access",feat3_desc:"One-click access to all Indian emergency helplines including ambulance, police, and hospital contacts.",feat4_title:"Multilingual Support",feat4_desc:"Available in Tamil, Hindi, Telugu, Malayalam, and English — serving patients across India.",disclaimer_title:"Important Disclaimer",disclaimer_text:"MediBot AI provides general health information only. It is NOT a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional for serious or persistent conditions.",appt_title:"Book an Appointment",lbl_name:"Full Name",lbl_date:"Date",lbl_hospital:"Hospital",lbl_doctor:"Doctor / Specialty",lbl_place:"Place / City",lbl_time:"Select Time Slot",btn_book:"📅 Confirm Appointment",sym_title:"AI Symptom Checker",sym_desc:"Type your symptom or temperature below. Try: 'fever 99', 'cough', 'headache', 'cold', 'stomach pain'...",emg_title:"Emergency Contacts",emg_sub:"Tap any number to call immediately. These are India's official emergency helplines.",greeting:"Hello! I'm MediBot. Tell me your symptom and I'll provide basic health guidance. Remember: always consult a doctor for serious conditions. 🏥"},
+  ta:{nav_home:"முகப்பு",nav_about:"பாட் பற்றி",nav_appt:"சந்திப்பு",nav_symptom:"அறிகுறி சரிபார்ப்பு",nav_emg:"அவசரம்",status_online:"AI இயங்குகிறது",status_secure:"பாதுகாப்பான & தனிப்பட்ட",status_24:"24/7 கிடைக்கும்",tile_symptom:"அறிகுறி சரிபார்ப்பு",tile_symptom_desc:"உங்கள் அறிகுறிகளை விவரிக்கவும், உடனடி வழிகாட்டுதல் பெறவும்.",tile_appt:"சந்திப்பு பதிவு",tile_appt_desc:"முன்னணி மருத்துவமனைகளில் நேரத்தை திட்டமிடுங்கள்.",tile_emg:"அவசர தொடர்புகள்",tile_emg_desc:"அவசர உதவி எண்களை விரைவாக அணுகவும்.",tile_about:"MediBot பற்றி",tile_about_desc:"இந்த AI உதவியாளர் எவ்வாறு செயல்படுகிறது என்று அறிக.",about_desc:"MediBot என்பது ஒரு புத்திசாலி AI மருத்துவ உதவியாளர்.",feat1_title:"அறிகுறி பகுப்பாய்வு",feat1_desc:"எளிய மொழியில் உங்கள் அறிகுறிகளை விவரிக்கவும், மருந்து பரிந்துரைகள் பெறவும்.",feat2_title:"நேர்த்தியான சந்திப்புகள்",feat2_desc:"முன்னணி மருத்துவமனைகளில் நேர slots பதிவு செய்யுங்கள்.",feat3_title:"அவசர அணுகல்",feat3_desc:"அனைத்து அவசர helplines-ஐ அணுகவும்.",feat4_title:"பல மொழி ஆதரவு",feat4_desc:"தமிழ், இந்தி, தெலுங்கு, மலையாளம், ஆங்கிலம்.",disclaimer_title:"முக்கியமான விதிமுறை",disclaimer_text:"MediBot AI பொதுவான சுகாதார தகவல்களை மட்டுமே வழங்குகிறது. தொழில்முறை மருத்துவ ஆலோசனையை மாற்றாது.",appt_title:"சந்திப்பு பதிவு",lbl_name:"முழு பெயர்",lbl_date:"தேதி",lbl_hospital:"மருத்துவமனை",lbl_doctor:"மருத்துவர் / சிறப்பு",lbl_place:"இடம் / நகரம்",lbl_time:"நேர slot தேர்ந்தெடு",btn_book:"📅 சந்திப்பை உறுதிப்படுத்து",sym_title:"AI அறிகுறி சரிபார்ப்பு",sym_desc:"உங்கள் அறிகுறி அல்லது வெப்பநிலையை தட்டச்சு செய்யுங்கள்.",emg_title:"அவசர தொடர்புகள்",emg_sub:"உடனடியாக அழைக்க எந்த எண்ணையும் தொடவும்.",greeting:"வணக்கம்! நான் MediBot. உங்கள் அறிகுறியை சொல்லுங்கள். 🏥"},
+  hi:{nav_home:"होम",nav_about:"बॉट के बारे में",nav_appt:"अपॉइंटमेंट",nav_symptom:"लक्षण जाँच",nav_emg:"आपातकाल",status_online:"AI ऑनलाइन",status_secure:"सुरक्षित और निजी",status_24:"24/7 उपलब्ध",tile_symptom:"लक्षण जाँचकर्ता",tile_symptom_desc:"अपने लक्षण बताएं और तुरंत AI मार्गदर्शन पाएं।",tile_appt:"अपॉइंटमेंट बुक करें",tile_appt_desc:"शीर्ष अस्पतालों में विजिट शेड्यूल करें।",tile_emg:"आपातकालीन संपर्क",tile_emg_desc:"आपातकालीन हेल्पलाइन नंबर तक त्वरित पहुंच।",tile_about:"MediBot के बारे में",tile_about_desc:"जानें यह AI सहायक कैसे काम करता है।",about_desc:"MediBot एक बुद्धिमान AI-संचालित स्वास्थ्य सहायक है।",feat1_title:"लक्षण विश्लेषण",feat1_desc:"सरल भाषा में लक्षण बताएं और दवा सुझाव पाएं।",feat2_title:"स्मार्ट अपॉइंटमेंट",feat2_desc:"शीर्ष अस्पतालों में टाइम स्लॉट बुक करें।",feat3_title:"आपातकालीन पहुंच",feat3_desc:"सभी भारतीय आपातकालीन हेल्पलाइन।",feat4_title:"बहुभाषी समर्थन",feat4_desc:"तमिल, हिंदी, तेलुगु, मलयालम और अंग्रेजी में उपलब्ध।",disclaimer_title:"महत्वपूर्ण अस्वीकरण",disclaimer_text:"MediBot AI केवल सामान्य स्वास्थ्य जानकारी प्रदान करता है। यह पेशेवर चिकित्सा सलाह का विकल्प नहीं है।",appt_title:"अपॉइंटमेंट बुक करें",lbl_name:"पूरा नाम",lbl_date:"तारीख",lbl_hospital:"अस्पताल",lbl_doctor:"डॉक्टर / विशेषज्ञता",lbl_place:"स्थान / शहर",lbl_time:"टाइम स्लॉट चुनें",btn_book:"📅 अपॉइंटमेंट पक्का करें",sym_title:"AI लक्षण जाँचकर्ता",sym_desc:"अपना लक्षण या तापमान टाइप करें।",emg_title:"आपातकालीन संपर्क",emg_sub:"तुरंत कॉल करने के लिए किसी भी नंबर पर टैप करें।",greeting:"नमस्ते! मैं MediBot हूं। अपना लक्षण बताएं। 🏥"},
+  te:{nav_home:"హోమ్",nav_about:"బాట్ గురించి",nav_appt:"అపాయింట్‌మెంట్",nav_symptom:"లక్షణ తనిఖీ",nav_emg:"అత్యవసరం",greeting:"నమస్కారం! నేను MediBot. మీ లక్షణాన్ని చెప్పండి. 🏥"},
+  ml:{nav_home:"ഹോം",nav_about:"ബോട്ടിനെക്കുറിച്ച്",nav_appt:"അപ്പോയിന്റ്മെന്റ്",nav_symptom:"ലക്ഷണ പരിശോധന",nav_emg:"അടിയന്തരം",greeting:"നമസ്കാരം! ഞാൻ MediBot ആണ്. നിങ്ങളുടെ ലക്ഷണം പറയൂ. 🏥"}
+};
+
+let currentLang='en';
+let selectedSlot='';
+let appointments=[];
+
+const symptomDB={
+  fever:{keywords:['fever','temperature','temp','kaichal','bukhar','viral'],tempRanges:[{max:98.6,title:"Normal Temperature",msg:"Your temperature is within normal range (98.6°F / 37°C). No medication needed. Stay hydrated and monitor if symptoms develop.",icon:"✅"},{max:100.4,title:"Low-Grade Fever",msg:"Mild fever detected.<br>• Drink plenty of water and fluids<br>• Rest and avoid exertion<br>• Apply a cool damp cloth on forehead<br>• <strong>Paracetamol 500mg</strong> every 4–6 hours if uncomfortable<br>• Monitor temperature every 2 hours",icon:"🌡️"},{max:102,title:"Moderate Fever",msg:"Moderate fever — take action soon.<br>• Take <strong>Paracetamol 650mg</strong> every 6 hours<br>• Drink ORS / electrolyte fluids<br>• Wear light clothing<br>• Visit a clinic if it persists over 2 days",icon:"⚠️"},{max:999,title:"High Fever — Seek Medical Help",msg:"High fever detected — consult a doctor immediately.<br>• Take <strong>Paracetamol 650mg</strong> right away<br>• Apply cool compress on forehead and armpits<br>• Visit a doctor or emergency clinic NOW<br>• Could indicate infection, dengue, or typhoid",icon:"🚨"}],default:"It sounds like you have a fever.<br>• Take <strong>Paracetamol 500–650mg</strong> every 6 hours<br>• Drink lots of water and fluids<br>• Rest and keep your body cool<br>• Consult a doctor if it persists more than 2 days"},
+  cough:{keywords:['cough','coughing','throat','ihrumal'],response:"Cough detected — here's what to do:<br>• <strong>Dry cough:</strong> Honey + warm water, Benadryl syrup<br>• <strong>Wet cough:</strong> Steam inhalation, Mucinex (guaifenesin)<br>• Gargle with warm salt water 3× daily<br>• Avoid cold drinks and ice cream<br>• Consult a doctor if it lasts more than 7 days",icon:"😮‍💨"},
+  cold:{keywords:['cold','runny nose','sneezing','nasal','congestion'],response:"Common cold — here's your care plan:<br>• <strong>Antihistamine:</strong> Cetirizine 10mg once daily<br>• <strong>Decongestant:</strong> Otrivin nasal spray<br>• Warm soups, ginger tea, and honey<br>• Steam inhalation 2× daily<br>• Vitamin C 500mg daily",icon:"🤧"},
+  headache:{keywords:['headache','head pain','migraine','thalai vali'],response:"Headache — here's how to manage:<br>• <strong>Mild headache:</strong> Paracetamol 500mg or Ibuprofen 400mg<br>• <strong>Migraine:</strong> Rest in a dark room<br>• Drink 2–3 glasses of water<br>• Reduce screen time and bright lights<br>• Apply cold compress on temples",icon:"🤕"},
+  stomach:{keywords:['stomach','stomach pain','abdomen','nausea','vomiting','diarrhea','gastric','indigestion','acidity'],response:"Stomach issue detected:<br>• <strong>Acidity/GERD:</strong> Omeprazole 20mg before meals, antacids (Gelusil, Digene)<br>• <strong>Diarrhea:</strong> ORS solution, BRAT diet (banana, rice, apple, toast)<br>• <strong>Nausea:</strong> Ondansetron 4mg or ginger tea<br>• Avoid spicy, oily foods<br>• Consult a doctor if pain is severe",icon:"😣"},
+  throat:{keywords:['sore throat','throat pain','tonsil','swallowing'],response:"Sore throat care:<br>• Ibuprofen or Paracetamol for pain relief<br>• Gargle warm salt water every few hours<br>• Strepsils or throat lozenges<br>• Warm ginger + honey + lemon tea<br>• Avoid cold drinks and smoking",icon:"🤒"},
+  back:{keywords:['back pain','lower back','spine','backache','muscle pain'],response:"Back pain management:<br>• <strong>NSAIDs:</strong> Ibuprofen 400mg or Diclofenac (with food)<br>• Apply warm compress or ice pack for 20 min<br>• Gentle stretching exercises<br>• Avoid lifting heavy objects<br>• Consult an orthopedic doctor if pain radiates to legs",icon:"🦴"},
+  dizziness:{keywords:['dizzy','dizziness','vertigo','spinning','lightheaded'],response:"Dizziness/Vertigo — here's what to do:<br>• <strong>Vertigo:</strong> Meclizine (Antivert) 25mg<br>• Sit or lie down immediately to prevent falls<br>• Stay hydrated — drink water/electrolytes<br>• Check blood pressure (low BP is a common cause)<br>• See a doctor if dizziness is recurrent",icon:"💫"}
+};
+
+function changeLang(lang){
+  currentLang=lang;
+  const t=translations[lang]||translations.en;
+  document.querySelectorAll('[data-key]').forEach(el=>{
+    const key=el.getAttribute('data-key');
+    if(t[key]) el.textContent=t[key];
+  });
+  const greetMsg=document.getElementById('greeting-msg');
+  if(greetMsg) greetMsg.innerHTML=t.greeting||translations.en.greeting;
+}
+
+function goTo(section,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('sec-'+section).classList.add('active');
+  if(btn) btn.classList.add('active');
+  else{const map={home:0,about:1,appointment:2,symptom:3,emergency:4};const items=document.querySelectorAll('.nav-item');if(items[map[section]])items[map[section]].classList.add('active');}
+}
+
+function selectSlot(el,time){
+  if(el.classList.contains('booked')) return;
+  document.querySelectorAll('.slot').forEach(s=>s.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedSlot=time;
+}
+
+function bookAppointment(){
+  const name=document.getElementById('appt_name').value.trim();
+  const date=document.getElementById('appt_date').value;
+  const hospital=document.getElementById('appt_hospital').value;
+  const doctor=document.getElementById('appt_doctor').value;
+  const place=document.getElementById('appt_place').value.trim();
+  const toast=document.getElementById('appt-toast');
+  if(!name||!date||!hospital||!doctor||!place||!selectedSlot){showToast(toast,'error','⚠️ Please fill all fields and select a time slot.');return;}
+  const duplicate=appointments.find(a=>a.doctor===doctor&&a.date===date&&a.time===selectedSlot);
+  if(duplicate){showToast(toast,'error','❌ This slot is already booked for '+doctor+'. The slot has expired for this time. Please select another slot or a different doctor.');document.querySelectorAll('.slot').forEach(s=>{if(s.textContent===selectedSlot)s.classList.add('booked');});selectedSlot='';document.querySelectorAll('.slot').forEach(s=>s.classList.remove('selected'));return;}
+  appointments.push({name,date,hospital,doctor,place,time:selectedSlot});
+  showToast(toast,'success','✅ Appointment confirmed for '+name+' with '+doctor+' at '+hospital+' on '+date+' at '+selectedSlot+'!');
+  renderBookings();
+  document.querySelectorAll('.slot').forEach(s=>{if(s.textContent===selectedSlot&&s.classList.contains('selected')){s.classList.remove('selected');s.classList.add('booked');}});
+  selectedSlot='';
+  document.getElementById('appt_name').value='';
+  document.getElementById('appt_place').value='';
+}
+
+function showToast(el,type,msg){el.className='toast show '+type;el.innerHTML=msg;setTimeout(()=>el.classList.remove('show'),6000);}
+
+function renderBookings(){
+  const container=document.getElementById('booked-list');
+  if(!appointments.length){container.innerHTML='';return;}
+  container.innerHTML='<div class="card-title" style="color:#fff;font-size:14px;margin-bottom:10px">📋 Confirmed Appointments ('+appointments.length+')</div>'+appointments.map(a=>`<div class="booked-item"><div class="booked-avatar">${a.name.charAt(0).toUpperCase()}</div><div class="booked-info"><h4>${a.name}</h4><p>${a.doctor} · ${a.hospital} · ${a.date} · ${a.time} · ${a.place}</p></div><span style="margin-left:auto;background:rgba(0,212,170,0.12);color:#00d4aa;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600">Confirmed</span></div>`).join('');
+}
+
+function quickSymptom(sym){document.getElementById('sym-input').value=sym;analyzeSymptom();}
+
+function analyzeSymptom(){
+  const input=document.getElementById('sym-input').value.trim();
+  if(!input) return;
+  const chat=document.getElementById('ai-chat');
+  const userDiv=document.createElement('div');
+  userDiv.className='ai-msg user-msg';
+  userDiv.innerHTML=`<div class="avatar user-avatar">👤</div><div class="bubble">${input}</div>`;
+  chat.appendChild(userDiv);
+  const typingDiv=document.createElement('div');
+  typingDiv.className='ai-msg';
+  typingDiv.innerHTML=`<div class="avatar ai-avatar">🤖</div><div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
+  chat.appendChild(typingDiv);
+  chat.scrollTop=chat.scrollHeight;
+  document.getElementById('sym-input').value='';
+  setTimeout(()=>{typingDiv.querySelector('.bubble').innerHTML=generateResponse(input.toLowerCase());chat.scrollTop=chat.scrollHeight;},900);
+}
+
+function extractTemp(text){const m=text.match(/(\d{2,3}(\.\d)?)\s*(degree|°|f|celsius|fahrenheit)?/i);if(m)return parseFloat(m[1]);return null;}
+
+function generateResponse(text){
+  for(const key in symptomDB){
+    const entry=symptomDB[key];
+    const matched=entry.keywords.some(k=>text.includes(k));
+    if(matched){
+      if(key==='fever'){const temp=extractTemp(text);if(temp){const range=entry.tempRanges.find(r=>temp<=r.max);if(range)return `${range.icon} <strong>${range.title}</strong> (${temp}°F detected)<br><br>${range.msg}<br><br><em style="color:var(--muted);font-size:11px">⚠️ This is general guidance only. Consult a doctor for persistent symptoms.</em>`;}return `🌡️ <strong>Fever Detected</strong><br><br>${entry.default}<br><br><em style="color:var(--muted);font-size:11px">⚠️ Consult a doctor if fever persists.</em>`;}
+      return `${entry.icon||'💊'} <strong>${key.charAt(0).toUpperCase()+key.slice(1)} Detected</strong><br><br>${entry.response}<br><br><em style="color:var(--muted);font-size:11px">⚠️ This is general guidance. Please consult a doctor for proper diagnosis.</em>`;
+    }
+  }
+  return `🤔 <strong>Symptom not found in database</strong><br><br>I couldn't identify specific guidance for "<em>${text}</em>".<br><br>• Please try: fever, cough, cold, headache, stomach pain, sore throat, back pain, dizziness<br>• For any serious symptom, please <strong>consult a doctor</strong> immediately.<br><br><em style="color:var(--muted);font-size:11px">📞 Call 104 for free health helpline advice.</em>`;
+}
+
+function toggleDark(){document.body.classList.toggle('light-mode');const btn=document.querySelector('.dark-toggle');btn.textContent=document.body.classList.contains('light-mode')?'🌙 Dark':'☀️ Light';}
+
+document.getElementById('appt_date').min=new Date().toISOString().split('T')[0];
+</script>
+</body>
+</html>
